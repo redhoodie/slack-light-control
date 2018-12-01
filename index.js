@@ -75,6 +75,19 @@ var pixel_control_loop = function() {
     strip.show();
   }
 
+  else if (pixel_mode = "steady") 
+  {
+    if (!initalised) {
+      for(var i = 0; i < strip_length; i++) {
+        colour =  "rgb(255,255,255)";
+        strip.pixel(i).color(colour);
+      }
+      initalised = true;
+    }
+    strip.shift(1, pixel.FORWARD, true);
+    strip.show();
+  }
+
   if (shutdown) {
     strip.off();
     strip.show();
@@ -155,7 +168,7 @@ rtm.on('message', (message) => {
     case "popo":
       set_mode("popo");
     case 'on':
-      start();
+      set_mode("steady");
       break;
     case 'off':
       stop();
