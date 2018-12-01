@@ -20,7 +20,7 @@ var pixel_control = function() {
   if (pixel_mode == "flashy") {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
-        var colour =  i % 2 == 1 ? "rgb(0, " + Math.round(250 * brightness) + ", 0)" : "rgb(" + Math.round(250 * brightness) + ", 0, 0)";
+        var colour =  i % 2 == 1 ? "rgb(10, " + Math.round(250 * brightness) + ", 30)" : "rgb(" + Math.round(250 * brightness) + ", 140, 30)";
         strip.pixel(i).color(colour);
       }
       initalised = true;
