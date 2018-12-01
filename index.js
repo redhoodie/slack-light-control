@@ -39,7 +39,14 @@ var pixel_control_loop = function() {
     strip.show();
   }
   else if (pixel_mode == "popo") {
-    initalised = true;
+    if (!initalised) {
+      for(var i = 0; i < strip_length; i++) {
+        colour = "black";
+        strip.pixel(i).color(colour);
+      }
+      strip.show();
+      initalised = true;
+    }
     for (var i = 0; i < strip_length; i++) {
       // left
       if (i <= (strip_length / 2)) {
@@ -48,7 +55,7 @@ var pixel_control_loop = function() {
           colour = "rgb(" + rgb_brightness + ", 0, 0)";
         }
         else {
-          color = "black";
+          colour = "black";
         }
       // Right
       } else {
@@ -57,7 +64,7 @@ var pixel_control_loop = function() {
           colour = "rgb(0, 0, " + rgb_brightness + ")";
         }
         else {
-          color = "black";
+          colour = "black";
         }
       }
 
