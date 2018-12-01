@@ -30,7 +30,7 @@ var pixel_control_loop = function() {
   if (pixel_mode == "flashy") {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
-        colour =  i % 2 == 1 ? "rgb(0, 0, " + rgb_brightness + ")" : "rgb(" + rgb_brightness + ", 0, 0)";
+        colour =  i % 2 == 1 ? "rgb(0," + rgb_brightness  + ",0)" : "rgb(" + rgb_brightness + ", 0, 0)";
         strip.pixel(i).color(colour);
       }
       initalised = true;
@@ -111,7 +111,7 @@ var board = new firmata.Board('/dev/tty.usbserial-A6008do8',function(){
       // do stuff with the strip here.
       console.log("ready");
 
-      set_mode('popo');
+      set_mode('flashy');
     });
 });
 
