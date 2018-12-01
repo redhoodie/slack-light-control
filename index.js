@@ -118,7 +118,7 @@ var board = new firmata.Board('/dev/tty.usbserial-A6008do8',function(){
       // do stuff with the strip here.
       console.log("ready");
 
-      set_mode('popo');
+      // set_mode('flashy');
     });
 });
 
