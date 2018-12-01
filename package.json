@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@slack/client": "^4.8.0",
-    "johnny-five": "^1.0.0"
+    "johnny-five": "^1.0.0",
+    "node-pixel": "^0.10.1"
   }
 }
