@@ -12,7 +12,7 @@ Control Christmas lights from Slack
 
 To issue a message to the bot, send it its name, then the command:
 
-`@lightbot fast`
+`@as_lightbot fast`
 
 Valid commands are:
 * fast: blink the lights quickly

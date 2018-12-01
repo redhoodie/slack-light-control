@@ -8,7 +8,7 @@ var interval = 200;
 var strip_length = 56;
 var strip;
 var shutdown = false;
-var brightness = 1; // 0...1 - ultrabright
+var brightness = 1; // 0...1 - ultra bright
 
 function sleep(ms){
   return new Promise(resolve=>{
