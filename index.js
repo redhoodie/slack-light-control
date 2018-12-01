@@ -3,6 +3,7 @@ var pixel = require("node-pixel");
 var firmata = require('firmata');
 var pixel_mode;
 var initalised;
+var colour = "black";
 var timer;
 var interval = 200;
 var strip_length = 56;
@@ -16,16 +17,46 @@ function sleep(ms){
   })
 }
 
-var pixel_control = function() {
+var pixel_control_loop = function() {
+  var rgb_brightness = Math.round(250 * brightness);
   if (pixel_mode == "flashy") {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
-        var colour =  i % 2 == 1 ? "rgb(0, 0, " + Math.round(250 * brightness) + ")" : "rgb(" + Math.round(250 * brightness) + ", 0, 0)";
+        colour =  i % 2 == 1 ? "rgb(0, 0, " + rgb_brightness + ")" : "rgb(" + rgb_brightness + ", 0, 0)";
         strip.pixel(i).color(colour);
       }
       initalised = true;
     }
     strip.shift(1, pixel.FORWARD, true);
+    strip.show();
+  }
+  else if (pixel_mode == "popo") {
+    initalised = true;
+    for (var i = 0; i < strip_length; i++) {
+      // left
+      if (i <= (strip_length / 2)) {
+        // Red
+        if (phase == 0 || phase == 5) {
+          colour = "rgb(" + rgb_brightness + ", 0, 0)";
+        }
+        else {
+          color = "black";
+        }
+      // Right
+      } else {
+        // Blue
+        if (phase == 2 || phase == 4) {
+          colour = "rgb(0, 0, " + rgb_brightness + ")";
+        }
+        else {
+          color = "black";
+        }
+      }
+
+      strip.pixel(i).color(colour);
+    }
+
+    phase = (phase + 1) % 6;
     strip.show();
   }
 
@@ -38,7 +69,7 @@ var pixel_control = function() {
 
 function set_interval(timeout) {
   clearInterval(timer);
-  setInterval(pixel_control,timeout);
+  timer = setInterval(pixel_control_loop, timeout);
 }
 
 function set_mode(mode){
@@ -60,7 +91,7 @@ var board = new firmata.Board('/dev/tty.usbserial-A6008do8',function(){
       // do stuff with the strip here.
       console.log("ready");
 
-      set_mode('flashy');
+      set_mode('popo');
     });
 });
 
