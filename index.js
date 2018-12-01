@@ -27,7 +27,7 @@ function sleep(ms){
 
 var pixel_control_loop = function() {
   var rgb_brightness = Math.round(250 * brightness);
-  if (pixel_mode == "flashy") {
+  if (pixel_mode == "christmas") {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
         colour =  i % 2 == 1 ? "rgb(0," + rgb_brightness  + ",0)" : "rgb(" + rgb_brightness + ", 0, 0)";
@@ -75,17 +75,18 @@ var pixel_control_loop = function() {
     strip.show();
   }
 
-  else if (pixel_mode = "steady") 
+  else if (pixel_mode == "steady") 
   {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
         colour =  "rgb(255,255,255)";
         strip.pixel(i).color(colour);
       }
-      initalised = true;
+    initalised = true;
     }
     strip.shift(1, pixel.FORWARD, true);
     strip.show();
+    
   }
 
   if (shutdown) {
@@ -112,6 +113,7 @@ function start() {
 }
 
 function stop() {
+  initalised = false; 
   clearInterval(timer);
   strip.color("black");
   strip.off();
@@ -130,8 +132,6 @@ var board = new firmata.Board('/dev/tty.usbserial-A6008do8',function(){
     strip.on("ready", function() {
       // do stuff with the strip here.
       console.log("ready");
-
-      // set_mode('flashy');
     });
 });
 
@@ -151,6 +151,7 @@ rtm.on('message', (message) => {
   }
 
   console.log(`(channel:${message.channel}) ${message.user} says: ${message.text}`);
+  console.log(pixel_mode);
 
   // Carry out the action
   switch (body) {
@@ -163,12 +164,17 @@ rtm.on('message', (message) => {
     case 'slow':
       set_interval(500);
       break;
-    case "flashy":
-      set_mode("flashy");
-    case "popo":
-      set_mode("popo");
+    case 'christmas':
+      set_mode('christmas');
+      break
+    case 'popo':
+      set_mode('popo');
+      break
+    case 'steady':
+      set_mode('steady');
+      break
     case 'on':
-      set_mode("steady");
+      start();
       break;
     case 'off':
       stop();
