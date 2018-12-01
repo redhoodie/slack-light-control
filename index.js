@@ -30,7 +30,13 @@ var pixel_control_loop = function() {
   if (pixel_mode == "christmas") {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
-        colour =  i % 2 == 1 ? "rgb(0," + rgb_brightness  + ",0)" : "rgb(" + rgb_brightness + ", 0, 0)";
+        if (i % 3 == 0) {
+          colour = "rgb(0," + rgb_brightness  + ",0)";
+        } else if (i % 3 == 1) {
+          colour = "rgb(" + rgb_brightness + ", 0, 0)"
+        } else {
+          colour = "rgb(" + rgb_brightness + ", " + rgb_brightness + ", 0)"
+        }
         strip.pixel(i).color(colour);
       }
       initalised = true;
