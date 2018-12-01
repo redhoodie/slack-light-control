@@ -8,7 +8,7 @@ var interval = 200;
 var strip_length = 56;
 var strip;
 var shutdown = false;
-var brightness = 0.05; // 0...1
+var brightness = 1; // 0...1 - ultrabright
 
 function sleep(ms){
   return new Promise(resolve=>{
@@ -20,7 +20,7 @@ var pixel_control = function() {
   if (pixel_mode == "flashy") {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
-        var colour =  i % 2 == 1 ? "rgb(10, " + Math.round(250 * brightness) + ", 30)" : "rgb(" + Math.round(250 * brightness) + ", 140, 30)";
+        var colour =  i % 2 == 1 ? "rgb(0, 0, " + Math.round(250 * brightness) + ")" : "rgb(" + Math.round(250 * brightness) + ", 0, 0)";
         strip.pixel(i).color(colour);
       }
       initalised = true;
@@ -34,6 +34,7 @@ var pixel_control = function() {
     strip.show();
   }
 }
+
 
 function set_interval(timeout) {
   clearInterval(timer);
