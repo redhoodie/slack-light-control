@@ -31,11 +31,11 @@ var pixel_control_loop = function() {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
         if (i % 3 == 0) {
-          colour = "rgb(0," + rgb_brightness  + ",0)";
+          colour = "rgb(0," + rgb_brightness + ",0)";
         } else if (i % 3 == 1) {
           colour = "rgb(" + rgb_brightness + ", 0, 0)"
         } else {
-          colour = "rgb(" + "0" + ", " + "0" + ", 255)"
+          colour = "rgb(0, 0, " + rgb_brightness + ")";
         }
         strip.pixel(i).color(colour);
       }
