@@ -245,9 +245,10 @@ rtm.on('message', (message) => {
       stop();
       break;
     default:
-      console.log("Colour sent: " + params[0]);
-      colour = params[0];
+      console.log("Colour sent: " + command);
+      colour = command;
       set_mode('steady');
       set_interval(100);
+      break;
   }
 });
