@@ -80,9 +80,29 @@ var pixel_control_loop = function() {
     phase = (phase + 1) % 6;
     strip.show();
   }
+  else if (pixel_mode == "rainbow") {
+    if (!initalised) {
 
-  else if (pixel_mode == "steady") 
-  {
+      var max = (255*255*255);
+
+      for(var i = 0; i < strip_length; i++) {
+        var red, green, blue;
+        var rgb = i * (max / strip_length);
+        red   = (rgb >> 16) & 0xFF;
+        green = (rgb >> 8) & 0xFF;
+        blue  = (rgb) & 0xFF;
+
+        strip.pixel(i).color("rgb(" + red + ", " + green + ", " + blue + ")");
+      }
+      strip.show();
+      initalised = true;
+    }
+    strip.shift(1, pixel.FORWARD, true);
+    strip.show();
+  }
+
+
+  else if (pixel_mode == "steady") {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
         colour =  "rgb(255,255,255)";
@@ -176,6 +196,10 @@ rtm.on('message', (message) => {
       break
     case 'popo':
       set_mode('popo');
+      set_interval(50);
+      break
+    case 'rainbow':
+      set_mode('rainbow');
       set_interval(50);
       break
     case 'steady':
