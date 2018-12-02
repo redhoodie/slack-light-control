@@ -88,9 +88,9 @@ var pixel_control_loop = function() {
       for(var i = 0; i < strip_length; i++) {
         var red, green, blue;
         var rgb = i * (max / strip_length);
-        red   = (rgb >> 16) & 0xFF;
-        green = (rgb >> 8) & 0xFF;
-        blue  = (rgb) & 0xFF;
+        red   = Math.round(((rgb >> 16) & 0xFF) * brightness);
+        green = Math.round(((rgb >> 8) & 0xFF) * brightness);
+        blue  = Math.round(((rgb) & 0xFF) * brightness);
 
         strip.pixel(i).color("rgb(" + red + ", " + green + ", " + blue + ")");
       }
