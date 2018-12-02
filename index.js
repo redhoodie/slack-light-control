@@ -234,6 +234,7 @@ rtm.on('message', (message) => {
     case 'color':
       console.log("Colour sent: " + params[0]);
       color = params[0];
+      set_mode('steady');
       break;
     case 'popo':
       set_mode('popo');
