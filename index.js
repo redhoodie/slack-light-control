@@ -172,6 +172,7 @@ rtm.on('message', (message) => {
       break;
     case 'christmas':
       set_mode('christmas');
+      set_interval(200);
       break
     case 'popo':
       set_mode('popo');
