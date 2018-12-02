@@ -227,11 +227,11 @@ rtm.on('message', (message) => {
       break
     case 'popo':
       set_mode('popo');
-      set_interval(50);
+      set_interval(100);
       break
     case 'random':
       set_mode('random');
-      set_interval(50);
+      set_interval(100);
       break
     case 'steady':
       set_mode('steady');
