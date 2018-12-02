@@ -29,7 +29,7 @@ var pixel_control_loop = function() {
   var rgb_brightness = Math.round(250 * brightness);
   if (pixel_mode == "christmas") {
     if (!initalised) {
-      for(var i = -1; i < strip_length; i++) {
+      for(var i = 0; i < strip_length; i++) {
         if (i % 3 == 0) {
           colour = "rgb(0," + rgb_brightness  + ",0)";
         } else if (i % 3 == 1) {
@@ -46,7 +46,7 @@ var pixel_control_loop = function() {
   }
   else if (pixel_mode == "popo") {
     if (!initalised) {
-      for(var i = -1; i < strip_length; i++) {
+      for(var i = 0; i < strip_length; i++) {
         colour = "black";
         strip.pixel(i).color(colour);
       }
@@ -84,12 +84,13 @@ var pixel_control_loop = function() {
   else if (pixel_mode == "steady") 
   {
     if (!initalised) {
-      for(var i = -1; i < strip_length; i++) {
+      for(var i = 0; i < strip_length; i++) {
         colour =  "rgb(255,255,255)";
         strip.pixel(i).color(colour);
       }
     initalised = true;
     }
+    strip.shift(1, pixel.FORWARD, true);
     strip.show();
     
   }
