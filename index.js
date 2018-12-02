@@ -182,10 +182,16 @@ rtm.on('message', (message) => {
       break
     case 'faster':
       interval = interval - 50;
+      if (interval < 50) {
+        interval = 50;
+      }
       set_interval(interval);
       break
     case 'slower':
       interval = interval + 50;
+      if (interval > 5000) {
+        interval = 5000;
+      }
       set_interval(interval);
       break
     case 'on':
