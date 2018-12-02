@@ -10,7 +10,7 @@ var interval = 100;
 var strip_length = 56;
 var strip;
 var shutdown = false;
-var brightness = 1; // 0...1 - ultra bright
+var brightness = 0.5; // 0...1 - ultra bright
 
 const { RTMClient } = require('@slack/client');
 
@@ -83,7 +83,6 @@ var pixel_control_loop = function() {
   else if (pixel_mode == "random") {
     for(var i = 0; i < strip_length; i++) {
       var red, green, blue;
-      var rgb = i * (max / strip_length);
       red   = Math.round(Math.random() * 255 * brightness);
       green = Math.round(Math.random() * 255 * brightness);
       blue  = Math.round(Math.random() * 255 * brightness);
@@ -173,6 +172,7 @@ rtm.on('message', (message) => {
 
   // Carry out the action
   switch (body) {
+    // Speed
     case 'fast':
       set_interval(50);
       break;
@@ -182,6 +182,45 @@ rtm.on('message', (message) => {
     case 'slow':
       set_interval(500);
       break;
+    case 'faster':
+      interval = interval - 50;
+      if (interval < 50) {
+        interval = 50;
+      }
+      set_interval(interval);
+      break
+    case 'slower':
+      interval = interval + 50;
+      if (interval > 5000) {
+        interval = 5000;
+      }
+      set_interval(interval);
+      break
+
+    // Brightness
+    case 'bright':
+      brightness = 1;
+      break;
+    case 'dim':
+      brightness = 0.5;
+      break;
+    case 'dark':
+      brightness = 0.1;
+      break;
+    case 'brighter':
+      brightness = brightness + 0.1;
+      if (brightness > 1) {
+        brightness = 1;
+      }
+      break
+    case 'darker':
+      brightness = brightness - 0.1;
+      if (brightness < 0) {
+        brightness = 0;
+      }
+      break
+
+    // Modes
     case 'christmas':
       set_mode('christmas');
       set_interval(200);
@@ -196,20 +235,6 @@ rtm.on('message', (message) => {
       break
     case 'steady':
       set_mode('steady');
-      break
-    case 'faster':
-      interval = interval - 50;
-      if (interval < 50) {
-        interval = 50;
-      }
-      set_interval(interval);
-      break
-    case 'slower':
-      interval = interval + 50;
-      if (interval > 5000) {
-        interval = 5000;
-      }
-      set_interval(interval);
       break
     case 'on':
       start();
