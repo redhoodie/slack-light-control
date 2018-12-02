@@ -57,7 +57,7 @@ var pixel_control_loop = function() {
       // left
       if (i <= (strip_length / 2)) {
         // Red
-        if (phase == 0 || phase == 5) {
+        if (phase == 0 || phase == 4) {
           colour = "rgb(" + rgb_brightness + ", 0, 0)";
         }
         else {
