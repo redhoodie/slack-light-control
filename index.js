@@ -80,24 +80,16 @@ var pixel_control_loop = function() {
     phase = (phase + 1) % 6;
     strip.show();
   }
-  else if (pixel_mode == "rainbow") {
-    if (!initalised) {
+  else if (pixel_mode == "random") {
+    for(var i = 0; i < strip_length; i++) {
+      var red, green, blue;
+      var rgb = i * (max / strip_length);
+      red   = Math.round(Math.random() * 255 * brightness);
+      green = Math.round(Math.random() * 255 * brightness);
+      blue  = Math.round(Math.random() * 255 * brightness);
 
-      var max = (255*255*255);
-
-      for(var i = 0; i < strip_length; i++) {
-        var red, green, blue;
-        var rgb = i * (max / strip_length);
-        red   = Math.round(((rgb >> 16) & 0xFF) * brightness);
-        green = Math.round(((rgb >> 8) & 0xFF) * brightness);
-        blue  = Math.round(((rgb) & 0xFF) * brightness);
-
-        strip.pixel(i).color("rgb(" + red + ", " + green + ", " + blue + ")");
-      }
-      strip.show();
-      initalised = true;
+      strip.pixel(i).color("rgb(" + red + ", " + green + ", " + blue + ")");
     }
-    strip.shift(1, pixel.FORWARD, true);
     strip.show();
   }
 
@@ -198,8 +190,8 @@ rtm.on('message', (message) => {
       set_mode('popo');
       set_interval(50);
       break
-    case 'rainbow':
-      set_mode('rainbow');
+    case 'random':
+      set_mode('random');
       set_interval(50);
       break
     case 'steady':
