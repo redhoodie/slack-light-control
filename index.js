@@ -10,11 +10,7 @@ var interval = 100;
 var strip_length = 56;
 var strip;
 var shutdown = false;
-<<<<<<< HEAD
-var brightness = 0.1; // 0...1 - ultra bright
-=======
 var brightness = 0.5; // 0...1 - ultra bright
->>>>>>> 233047fab65cd79fbe9484936b2f148637da5cf5
 
 const { RTMClient } = require('@slack/client');
 
