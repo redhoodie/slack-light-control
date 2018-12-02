@@ -95,14 +95,10 @@ var pixel_control_loop = function() {
 
 
   else if (pixel_mode == "steady") {
-    if (!initalised) {
-      for(var i = 0; i < strip_length; i++) {
-        strip.pixel(i).color(colour);
-      }
-    initalised = true;
+    for(var i = 0; i < strip_length; i++) {
+      strip.pixel(i).color(colour);
     }
     strip.show();
-    
   }
 
   if (shutdown) {
