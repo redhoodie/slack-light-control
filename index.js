@@ -180,6 +180,14 @@ rtm.on('message', (message) => {
     case 'steady':
       set_mode('steady');
       break
+    case 'faster':
+      interval = interval - 50;
+      set_interval(interval);
+      break
+    case 'slower':
+      interval = interval + 50;
+      set_interval(interval);
+      break
     case 'on':
       start();
       break;
