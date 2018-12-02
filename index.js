@@ -6,7 +6,7 @@ var initalised;
 var colour = "black";
 var phase = 0;
 var timer;
-var interval = 200;
+var interval = 100;
 var strip_length = 56;
 var strip;
 var shutdown = false;
@@ -162,10 +162,10 @@ rtm.on('message', (message) => {
   // Carry out the action
   switch (body) {
     case 'fast':
-      set_interval(100);
+      set_interval(50);
       break;
     case 'normal':
-      set_interval(200);
+      set_interval(100);
       break;
     case 'slow':
       set_interval(500);
