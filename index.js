@@ -66,7 +66,7 @@ var pixel_control_loop = function() {
       // Right
       } else {
         // Blue
-        if (phase == 2 || phase == 4) {
+        if (phase == 1 || phase == 3) {
           colour = "rgb(0, 0, " + rgb_brightness + ")";
         }
         else {
