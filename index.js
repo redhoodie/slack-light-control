@@ -174,7 +174,9 @@ rtm.on('message', (message) => {
 
 
   // Carry out the action
-  (command, param) = body.split(' ');
+  var params = body.split(' ');
+
+  command = params.shift();
 
   switch (command) {
     // Speed
@@ -232,7 +234,7 @@ rtm.on('message', (message) => {
       break
     case 'colour':
     case 'color':
-      console.log("Colour sent: " + param);
+      console.log("Colour sent: " + params[0]);
       break;
     case 'popo':
       set_mode('popo');
