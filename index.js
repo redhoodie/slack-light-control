@@ -97,12 +97,10 @@ var pixel_control_loop = function() {
   else if (pixel_mode == "steady") {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
-        colour =  "rgb(255,255,255)";
         strip.pixel(i).color(colour);
       }
     initalised = true;
     }
-    strip.shift(1, pixel.FORWARD, true);
     strip.show();
     
   }
@@ -235,6 +233,7 @@ rtm.on('message', (message) => {
     case 'colour':
     case 'color':
       console.log("Colour sent: " + params[0]);
+      color = params[0];
       break;
     case 'popo':
       set_mode('popo');
