@@ -175,6 +175,7 @@ rtm.on('message', (message) => {
       break
     case 'popo':
       set_mode('popo');
+      set_interval(50);
       break
     case 'steady':
       set_mode('steady');
