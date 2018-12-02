@@ -10,7 +10,7 @@ var interval = 100;
 var strip_length = 56;
 var strip;
 var shutdown = false;
-var brightness = 0.3; // 0...1 - ultra bright
+var brightness = 0.1; // 0...1 - ultra bright
 
 const { RTMClient } = require('@slack/client');
 
@@ -83,7 +83,7 @@ var pixel_control_loop = function() {
   else if (pixel_mode == "random") {
     for(var i = 0; i < strip_length; i++) {
       var red, green, blue;
-      var rgb = i * (max / strip_length);
+      // var rgb = i * (max / strip_length);
       red   = Math.round(Math.random() * 255 * brightness);
       green = Math.round(Math.random() * 255 * brightness);
       blue  = Math.round(Math.random() * 255 * brightness);
