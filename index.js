@@ -35,7 +35,7 @@ var pixel_control_loop = function() {
         } else if (i % 3 == 1) {
           colour = "rgb(" + rgb_brightness + ", 0, 0)"
         } else {
-          colour = "rgb(" + rgb_brightness + ", " + rgb_brightness + ", 0)"
+          colour = "rgb(" + "0" + ", " + "0" + ", 255)"
         }
         strip.pixel(i).color(colour);
       }
