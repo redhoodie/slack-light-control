@@ -90,7 +90,6 @@ var pixel_control_loop = function() {
       }
     initalised = true;
     }
-    strip.shift(1, pixel.FORWARD, true);
     strip.show();
     
   }
