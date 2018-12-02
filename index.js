@@ -10,7 +10,11 @@ var interval = 100;
 var strip_length = 56;
 var strip;
 var shutdown = false;
+<<<<<<< HEAD
 var brightness = 0.1; // 0...1 - ultra bright
+=======
+var brightness = 0.5; // 0...1 - ultra bright
+>>>>>>> 233047fab65cd79fbe9484936b2f148637da5cf5
 
 const { RTMClient } = require('@slack/client');
 
@@ -31,11 +35,11 @@ var pixel_control_loop = function() {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
         if (i % 3 == 0) {
-          colour = "rgb(0," + rgb_brightness  + ",0)";
+          colour = "rgb(0," + rgb_brightness + ",0)";
         } else if (i % 3 == 1) {
           colour = "rgb(" + rgb_brightness + ", 0, 0)"
         } else {
-          colour = "rgb(" + "0" + ", " + "0" + ", 255)"
+          colour = "rgb(0, 0, " + rgb_brightness + ")";
         }
         strip.pixel(i).color(colour);
       }
@@ -83,7 +87,6 @@ var pixel_control_loop = function() {
   else if (pixel_mode == "random") {
     for(var i = 0; i < strip_length; i++) {
       var red, green, blue;
-      // var rgb = i * (max / strip_length);
       red   = Math.round(Math.random() * 255 * brightness);
       green = Math.round(Math.random() * 255 * brightness);
       blue  = Math.round(Math.random() * 255 * brightness);
@@ -173,6 +176,7 @@ rtm.on('message', (message) => {
 
   // Carry out the action
   switch (body) {
+    // Speed
     case 'fast':
       set_interval(50);
       break;
@@ -182,21 +186,6 @@ rtm.on('message', (message) => {
     case 'slow':
       set_interval(500);
       break;
-    case 'christmas':
-      set_mode('christmas');
-      set_interval(200);
-      break
-    case 'popo':
-      set_mode('popo');
-      set_interval(50);
-      break
-    case 'random':
-      set_mode('random');
-      set_interval(50);
-      break
-    case 'steady':
-      set_mode('steady');
-      break
     case 'faster':
       interval = interval - 50;
       if (interval < 50) {
@@ -210,6 +199,46 @@ rtm.on('message', (message) => {
         interval = 5000;
       }
       set_interval(interval);
+      break
+
+    // Brightness
+    case 'bright':
+      brightness = 1;
+      break;
+    case 'dim':
+      brightness = 0.5;
+      break;
+    case 'dark':
+      brightness = 0.1;
+      break;
+    case 'brighter':
+      brightness = brightness + 0.1;
+      if (brightness > 1) {
+        brightness = 1;
+      }
+      break
+    case 'darker':
+      brightness = brightness - 0.1;
+      if (brightness < 0) {
+        brightness = 0;
+      }
+      break
+
+    // Modes
+    case 'christmas':
+      set_mode('christmas');
+      set_interval(200);
+      break
+    case 'popo':
+      set_mode('popo');
+      set_interval(100);
+      break
+    case 'random':
+      set_mode('random');
+      set_interval(100);
+      break
+    case 'steady':
+      set_mode('steady');
       break
     case 'on':
       start();
