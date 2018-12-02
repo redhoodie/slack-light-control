@@ -83,9 +83,10 @@ var pixel_control_loop = function() {
   else if (pixel_mode == "random") {
     for(var i = 0; i < strip_length; i++) {
       var red, green, blue;
-      red   = Math.round(Math.random() * 255 * brightness);
-      green = Math.round(Math.random() * 255 * brightness);
-      blue  = Math.round(Math.random() * 255 * brightness);
+      // red = Math.floor(Math.random() * Math.floor(255));
+      red   = Math.round(Math.random() * Math.floor(70) * brightness);
+      green = Math.round(Math.random() * Math.floor(70) * brightness);
+      blue  = Math.round(Math.random() * Math.floor(70) * brightness);
 
       strip.pixel(i).color("rgb(" + red + ", " + green + ", " + blue + ")");
     }
@@ -169,6 +170,8 @@ rtm.on('message', (message) => {
 
   console.log(`(channel:${message.channel}) ${message.user} says: ${message.text}`);
   console.log(pixel_mode);
+  console.log(body)
+
 
   // Carry out the action
   switch (body) {
@@ -205,7 +208,7 @@ rtm.on('message', (message) => {
       brightness = 0.5;
       break;
     case 'dark':
-      brightness = 0.1;
+      brightness = 0.05;
       break;
     case 'brighter':
       brightness = brightness + 0.1;
@@ -216,7 +219,7 @@ rtm.on('message', (message) => {
     case 'darker':
       brightness = brightness - 0.1;
       if (brightness < 0) {
-        brightness = 0;
+        brightness = 0.05;
       }
       break
 
@@ -225,6 +228,9 @@ rtm.on('message', (message) => {
       set_mode('christmas');
       set_interval(200);
       break
+    case String(body.match(/(color |colour ) .*$/)):
+      console.log("Colour sent: " + body.match(/?<=color |colour ).*$/));
+      break;
     case 'popo':
       set_mode('popo');
       set_interval(100);
