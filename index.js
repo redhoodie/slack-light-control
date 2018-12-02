@@ -174,7 +174,9 @@ rtm.on('message', (message) => {
 
 
   // Carry out the action
-  switch (body) {
+  (command, param) = body.split(' ');
+
+  switch (command) {
     // Speed
     case 'fast':
       set_interval(50);
@@ -228,8 +230,9 @@ rtm.on('message', (message) => {
       set_mode('christmas');
       set_interval(200);
       break
-    case String(body.match(/^(color|colour) .*$/)):
-      console.log("Colour sent: " + body.replace(/color|colour) /, ''));
+    case 'colour':
+    case 'color':
+      console.log("Colour sent: " + param);
       break;
     case 'popo':
       set_mode('popo');
