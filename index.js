@@ -197,6 +197,17 @@ rtm.on('message', (message) => {
       }
       set_interval(interval);
       break
+    case 'speed':
+      interval = parseInt(params[0]) || 200;
+      if (interval < 50) {
+        interval = 50;
+      }
+      if (interval > 5000) {
+        interval = 5000;
+      }
+      set_interval(interval);
+      break
+
 
     // Brightness
     case 'bright':
@@ -218,6 +229,15 @@ rtm.on('message', (message) => {
       brightness = brightness - 0.1;
       if (brightness < 0) {
         brightness = 0.05;
+      }
+      break
+    case 'brightness':
+      brightness = parseFloat(params[0]) || 0.5;
+      if (brightness < 0) {
+        brightness = 0.05;
+      }
+      if (brightness > 1) {
+        brightness = 1;
       }
       break
 
