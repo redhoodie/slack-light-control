@@ -226,13 +226,6 @@ rtm.on('message', (message) => {
       set_mode('christmas');
       set_interval(200);
       break
-    case 'colour':
-    case 'color':
-      console.log("Colour sent: " + params[0]);
-      colour = params[0];
-      set_mode('steady');
-      set_interval(100);
-      break;
     case 'popo':
       set_mode('popo');
       set_interval(100);
@@ -251,5 +244,10 @@ rtm.on('message', (message) => {
     case 'off':
       stop();
       break;
+    default:
+      console.log("Colour sent: " + params[0]);
+      colour = params[0];
+      set_mode('steady');
+      set_interval(100);
   }
 });
