@@ -18,6 +18,8 @@ const { RTMClient } = require('@slack/client');
 
 const token = process.env.SLACK_TOKEN;
 
+console.log(token);
+
 const rtm = new RTMClient(token);
 rtm.start();
 
@@ -26,8 +28,6 @@ function sleep(ms){
       setTimeout(resolve,ms)
   })
 }
-
-// var rainbow = colorWheel(((i+10)*256/strip.length)&255);
 
  // Input a value 0 to 255 to get a color value.
     // The colors are a transition r - g - b - back to r.
@@ -362,7 +362,6 @@ console.log('old mode is: ' + current_mode);
       break
     case 'rainbow':
       set_mode('rainbow');
-      // set_interval(100);
       break
     case 'on':
       start();

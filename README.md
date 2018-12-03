@@ -12,20 +12,20 @@ Control LED strip lights from Slack
 
 To issue a message to the bot, send it its name, then the command:
 
-`@as_lightbot police`
+`@AS Light Bot command`
 
 Valid commands are:
-* christmas: Blink the lights red and green and blue. (Just green and blue maybe?)
+* christmas: Blink the lights red and green.
 * popo: Flash half the light bar red and blue, in the pattern of police car lights in NZ.
 * off: Does what it says on the tin. (turns the lights off)
 * random: Flashes lots of random colors. Currently its quite bright and doesn't look too good, so working on tweaking it.
 * ~~fade: Fade through the color spectrum~~ Doesn't work right now. Still getting it going.
 * rainbow: A static spectrum of colors.
 * *colour*: Anything else, the bot will try parse as a colour. 
+* *More to come*
 
 All commands are case-insensitive.
 
-More to come
 
 ## Credit
 
