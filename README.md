@@ -12,7 +12,7 @@ Control LED strip lights from Slack
 
 To issue a message to the bot, send it its name, then the command:
 
-`@as_lightbot popo`
+`@as_lightbot police`
 
 Valid commands are:
 * christmas: Blink the lights red and green and blue. (Just green and blue maybe?)

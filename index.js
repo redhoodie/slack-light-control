@@ -27,42 +27,44 @@ function sleep(ms){
   })
 }
 
+// var rainbow = colorWheel(((i+10)*256/strip.length)&255);
+
  // Input a value 0 to 255 to get a color value.
     // The colors are a transition r - g - b - back to r.
-function colorWheel( WheelPos ){
+function colorWheel( wheelpos ){
     var r,g,b;
-    WheelPos = 255 - WheelPos;
+    wheelpos = 255 - wheelpos;
 
-    if ( WheelPos < 85 ) {
-        r = 255 - WheelPos * 3;
+    if ( wheelpos < 85 ) {
+        r = 255 - wheelpos * 3;
         g = 0;
-        b = WheelPos * 3;
-    } else if (WheelPos < 170) {
-        WheelPos -= 85;
+        b = wheelpos * 3;
+    } else if (wheelpos < 170) {
+        wheelpos -= 85;
         r = 0;
-        g = WheelPos * 3;
-        b = 255 - WheelPos * 3;
+        g = wheelpos * 3;
+        b = 255 - wheelpos * 3;
     } else {
-        WheelPos -= 170;
-        r = WheelPos * 3;
-        g = 255 - WheelPos * 3;
+        wheelpos -= 170;
+        r = wheelpos * 3;
+        g = 255 - wheelpos * 3;
         b = 0;
     }
     // returns a string with the rgb value to be used as the parameter
     return "rgb(" + r +"," + g + "," + b + ")";
 }
 
+
+
 var pixel_control_loop = function() {
   var rgb_brightness = Math.round(250 * brightness);
   if (pixel_mode == "christmas") {
     if (!initalised) {
       for(var i = 0; i < strip_length; i++) {
-        if (i % 3 == 0) {
+        if (i % 2 == 0) {
           colour = "rgb(0," + rgb_brightness + ",0)";
-        } else if (i % 3 == 1) {
-          colour = "rgb(" + rgb_brightness + ", 0, 0)"
         } else {
-          colour = "rgb(0, 0, " + rgb_brightness + ")";
+          colour = "rgb(" + rgb_brightness + ", 0, 0)"
         }
         strip.pixel(i).color(colour);
       }
@@ -111,9 +113,9 @@ var pixel_control_loop = function() {
     for(var i = 0; i < strip_length; i++) {
       var red, green, blue;
       // red = Math.floor(Math.random() * Math.floor(255));
-      red   = Math.round(Math.random() * Math.floor(70) * brightness);
-      green = Math.round(Math.random() * Math.floor(70) * brightness);
-      blue  = Math.round(Math.random() * Math.floor(70) * brightness);
+      red   = Math.round(Math.random() * Math.floor(85) * brightness);
+      green = Math.round(Math.random() * Math.floor(85) * brightness);
+      blue  = Math.round(Math.random() * Math.floor(85) * brightness);
 
       strip.pixel(i).color("rgb(" + red + ", " + green + ", " + blue + ")");
     }
@@ -128,55 +130,58 @@ var pixel_control_loop = function() {
     strip.show();
   }
 
+else if (pixel_mode == "flashy") {
+    if (!initalised) {
+      for(var i = 0; i < strip_length; i++) {
+        colour = "black";
+        strip.pixel(i).color(colour);
+      }
+      strip.show();
+      initalised = true;
+    }
+    for (var i = 0; i < strip_length; i++) {
+      if (i <= (strip_length)) {
+        if (phase == 0 || phase == 2)
+        {
+          if (current_mode != "rainbow") 
+          {
+            colour = currentcolor;    
+          }
+          else
+          {
 
-  ///
+          colour = colorWheel(((i+10)*256/strip.length)&255);
 
-
-else if (pixel_mode == "fade")
-{
-  function dynamicRainbow( delay ){
-
-        var showColor;
-        var cwi = 0; // colour wheel index (current position on colour wheel)
-        var foo = setInterval(function(){
-            if (++cwi > 255) {
-                cwi = 0;
-            }
-
-            for(var i = 0; i < strip.length; i++) {
-                showColor = colorWheel( ( cwi+i ) & 255 );
-                strip.pixel( i ).color( showColor );
-            }
-            strip.show();
-        }, 100/delay);
+          }
+        }
+        else {
+          colour = "black";
+        }
+      } 
+      strip.pixel(i).color(colour);
     }
 
+    phase = (phase + 1) % 2;
     strip.show();
-    delay = 10;
-    dynamicRainbow(delay);
-}
-
-  ///
+  }
 
 else if (pixel_mode == "rainbow")
 {
-  function staticRainbow()
-  {
-  var showColor;
-        for(var i = 0; i < strip.length; i++) {
-            showColor = colorWheel( ( (i+10)*256 / strip.length ) & 255 );
-            strip.pixel(i).color( showColor);
+        for(var i = 0; i < strip.length; i++) 
+        {
+             colour = colorWheel(((i+10)*256/strip.length)&255);
+             strip.pixel(i).color(colour);
         }
         strip.show();
-      }
-      staticRainbow();
-
 }
+
+
   if (shutdown) {
     strip.off();
     strip.show();
   }
 }
+
 
 
 function set_interval(timeout) {
@@ -234,17 +239,22 @@ rtm.on('message', (message) => {
   }
 
   console.log(`(channel:${message.channel}) ${message.user} says: ${message.text}`);
-  console.log(pixel_mode);
-  console.log(body)
+  // console.log(pixel_mode);
+  // console.log(body);
+
+current_mode = pixel_mode;
+
+console.log('old mode is: ' + current_mode);
 
 
-// rtm.sendMessage('That is not a valid command.', message.channel)
+
   // Carry out the action
   var params = body.split(' ');
 
-  command = params.shift();
-  // console.log(typeof(command));
-  command = command.toLowerCase();
+  command = params.shift().toLowerCase();
+
+  console.log('new command is: ' + command);
+  
 
   switch (command) {
     // Speed
@@ -320,6 +330,10 @@ rtm.on('message', (message) => {
       set_mode('christmas');
       set_interval(200);
       break
+    case 'flashy':
+      set_mode('flashy');
+      set_interval(200);
+      break
     case 'police':
     case 'popo':
       set_mode('popo');
@@ -354,10 +368,12 @@ rtm.on('message', (message) => {
         colour = command;
         set_mode('steady');
         set_interval(100);
+        currentcolor = colour;
+        console.log(currentcolor);
       }
       else
       {
-        https.get('https://slack.com/api/chat.postEphemeral?token='+token+'&channel='+message.channel+'&text=Not%20valid%20command.&user='+message.user+'&pretty=1');    
+        https.get('https://slack.com/api/chat.postEphemeral?token='+token+'&channel='+message.channel+'&text=Not%20a%20valid%20command.&user='+message.user+'&pretty=1');    
       }
       break;
   }
