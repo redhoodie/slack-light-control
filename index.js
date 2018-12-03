@@ -1,5 +1,6 @@
 // var five = require("johnny-five");
 var pixel = require("node-pixel");
+const https = require ('https');
 var firmata = require('firmata');
 var pixel_mode;
 var initalised;
@@ -229,6 +230,7 @@ rtm.on('message', (message) => {
   console.log(body)
 
 
+// rtm.sendMessage('That is not a valid command.', message.channel)
   // Carry out the action
   var params = body.split(' ');
 
@@ -312,8 +314,8 @@ rtm.on('message', (message) => {
       set_mode('popo');
       set_interval(100);
       break
-    case 'allcolours':
-      set_mode('allcolours');
+    case 'fade':
+      set_mode('fade');
       set_interval(100);
       break      
     case 'random':
@@ -332,7 +334,14 @@ rtm.on('message', (message) => {
       break;
     default:
       console.log("Colour sent: " + command);
-      colour = command;
+      if(command != 'green')
+      {
+        https.get('https://slack.com/api/chat.postEphemeral?token='+process.env.SLACK_TOKEN+'&channel='+message.channel+'&text=Not%20valid%20command.&user='+message.user+'&pretty=1');
+      }
+      else
+      {
+        colour = command;
+      }
       set_mode('steady');
       set_interval(100);
       break;
