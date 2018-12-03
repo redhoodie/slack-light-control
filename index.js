@@ -1,7 +1,8 @@
 // var five = require("johnny-five");
+var validcolors = require("./validcolors.json")
 var pixel = require("node-pixel");
-const https = require ('https');
-var firmata = require('firmata');
+const https = require ("https");
+var firmata = require("firmata");
 var pixel_mode;
 var initalised;
 var colour = "black";
@@ -235,6 +236,8 @@ rtm.on('message', (message) => {
   var params = body.split(' ');
 
   command = params.shift();
+  // console.log(typeof(command));
+  command = command.toLowerCase();
 
   switch (command) {
     // Speed
@@ -310,6 +313,7 @@ rtm.on('message', (message) => {
       set_mode('christmas');
       set_interval(200);
       break
+    case 'police':
     case 'popo':
       set_mode('popo');
       set_interval(100);
@@ -334,16 +338,17 @@ rtm.on('message', (message) => {
       break;
     default:
       console.log("Colour sent: " + command);
-      if(command != 'green')
+      console.log(typeof(validcolors));
+      if(command in validcolors)
       {
-        https.get('https://slack.com/api/chat.postEphemeral?token='+process.env.SLACK_TOKEN+'&channel='+message.channel+'&text=Not%20valid%20command.&user='+message.user+'&pretty=1');
+        colour = command;
+        set_mode('steady');
+        set_interval(100);
       }
       else
       {
-        colour = command;
+        https.get('https://slack.com/api/chat.postEphemeral?token='+process.env.SLACK_TOKEN+'&channel='+message.channel+'&text=Not%20valid%20command.&user='+message.user+'&pretty=1');    
       }
-      set_mode('steady');
-      set_interval(100);
       break;
   }
 });
