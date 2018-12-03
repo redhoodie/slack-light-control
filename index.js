@@ -254,7 +254,7 @@ console.log('old mode is: ' + current_mode);
   command = params.shift().toLowerCase();
 
   console.log('new command is: ' + command);
-  
+
 
   switch (command) {
     // Speed
@@ -331,8 +331,16 @@ console.log('old mode is: ' + current_mode);
       set_interval(200);
       break
     case 'flashy':
-      set_mode('flashy');
-      set_interval(200);
+      if (command == "flashy" && current_mode != "steady" && current_mode != "rainbow") //can't flash something already flashing i.e police lights
+      {
+        https.get('https://slack.com/api/chat.postEphemeral?token='+token+'&channel='+message.channel+'&text=Cannot%20flash%20an%20already%20dynamic%20pattern.&user='+message.user+'&pretty=1'); 
+        break;
+      }
+      else
+      {
+        set_mode('flashy');
+        set_interval(100);
+      }
       break
     case 'police':
     case 'popo':
@@ -349,11 +357,12 @@ console.log('old mode is: ' + current_mode);
       break
     case 'steady':
       set_mode('steady');
+      console.error(colour);
       set_interval(100);
       break
     case 'rainbow':
       set_mode('rainbow');
-      set_interval(100);
+      // set_interval(100);
       break
     case 'on':
       start();
@@ -366,8 +375,14 @@ console.log('old mode is: ' + current_mode);
       if(command in validcolors)
       {
         colour = command;
-        set_mode('steady');
-        set_interval(100);
+        if (current_mode == "flashy") 
+        {
+          set_mode('flashy');
+        }
+        else
+        {
+          set_mode('steady');
+        }
         currentcolor = colour;
         console.log(currentcolor);
       }
