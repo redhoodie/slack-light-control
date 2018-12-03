@@ -19,7 +19,9 @@ Valid commands are:
 * popo: Flash half the light bar red and blue, in the pattern of NZ Police car lights
 * off: Does what it says on the tin (turns the lights off)
 * random: Lots of random colors. Currently its quite bright and doesn't look too good, so working on tweaking it
+* ~~fade: Fade through the color spectrum~~ Doesn't work right now. Still getting it going.
 * *colour*: Anything else, the bot will try parse as a colour. 
+
 
 More to come
 
