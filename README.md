@@ -15,11 +15,11 @@ To issue a message to the bot, send it its name, then the command:
 `@as_lightbot popo`
 
 Valid commands are:
-* christmas: blink the lights red and green and blue
-* popo: flash half the light bar red and blue, in the pattern of police lights
-* off: turn the lights off
-* random: lots of random colors. Currently its quite bright and doesn't too good so working on tweaking it
-* *colour* Send the bot a valid colour and the lightbar will display that colour on solid.
+* christmas: Blink the lights red and green and blue
+* popo: Flash half the light bar red and blue, in the pattern of NZ Police car lights
+* off: Does what it says on the tin (turns the lights off)
+* random: Lots of random colors. Currently its quite bright and doesn't look too good, so working on tweaking it
+* *colour*: Anything else, the bot will try parse as a colour. 
 
 More to come
 
