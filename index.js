@@ -27,6 +27,31 @@ function sleep(ms){
   })
 }
 
+ // Input a value 0 to 255 to get a color value.
+    // The colors are a transition r - g - b - back to r.
+function colorWheel( WheelPos ){
+    var r,g,b;
+    WheelPos = 255 - WheelPos;
+
+    if ( WheelPos < 85 ) {
+        r = 255 - WheelPos * 3;
+        g = 0;
+        b = WheelPos * 3;
+    } else if (WheelPos < 170) {
+        WheelPos -= 85;
+        r = 0;
+        g = WheelPos * 3;
+        b = 255 - WheelPos * 3;
+    } else {
+        WheelPos -= 170;
+        r = WheelPos * 3;
+        g = 255 - WheelPos * 3;
+        b = 0;
+    }
+    // returns a string with the rgb value to be used as the parameter
+    return "rgb(" + r +"," + g + "," + b + ")";
+}
+
 var pixel_control_loop = function() {
   var rgb_brightness = Math.round(250 * brightness);
   if (pixel_mode == "christmas") {
@@ -103,68 +128,50 @@ var pixel_control_loop = function() {
     strip.show();
   }
 
-  else if (pixel_mode == "fade") 
-  {
 
-        strip.color('#000000');
-        strip.show();
-        var fps = 40;
-        let colors = ["red", "green", "blue", "yellow", "cyan", "magenta"];
-        let current_color = 0;
-        let fade_level = 0;
-        let fade_up = true;
-        var fader = setInterval(function() {
+  ///
 
-            if (fade_up) {
-                // fading upwards, if we hit the top then turn around
-                // and go back down again.
-                if (++fade_level > 255) {
-                    fade_up = false;
-                }
-            } else {
-                if (--fade_level < 0) {
-                    fade_up = true;
-                    fade_level = 0;
-                    if (++current_color >= colors.length) current_color = 0;
-                }
+
+else if (pixel_mode == "fade")
+{
+  function dynamicRainbow( delay ){
+
+        var showColor;
+        var cwi = 0; // colour wheel index (current position on colour wheel)
+        var foo = setInterval(function(){
+            if (++cwi > 255) {
+                cwi = 0;
             }
 
-            let hc = "";
-            switch (colors[current_color]) {
-                case "red":
-                    hc = `rgb(${fade_level}, 0, 0)`;
-                    break;
-                case "green":
-                    hc = `rgb(0, ${fade_level}, 0)`;
-                    break;
-                case "blue":
-                    hc = `rgb(0, 0, ${fade_level})`;
-                    break;
-                case "white":
-                    hc = `rgb(${fade_level}, ${fade_level}, ${fade_level})`;
-                    break;
-                case "yellow":
-                    hc = `rgb(${fade_level}, ${fade_level}, 0)`;
-                    break;
-                case "magenta":
-                    hc = `rgb(${fade_level}, 0, ${fade_level})`;
-                    break;
-                case "cyan":
-                    hc = `rgb(0, ${fade_level}, ${fade_level})`;
-                    break;
+            for(var i = 0; i < strip.length; i++) {
+                showColor = colorWheel( ( cwi+i ) & 255 );
+                strip.pixel( i ).color( showColor );
             }
-
-            // need to do this by pixel
-            for (let i = 0; i < strip.length; i++) {
-                strip.pixel(i).color(hc);
-            }
-            //strip.color(hc);
             strip.show();
-        }, 1000/fps);
-    
+        }, 100/delay);
+    }
 
-  }
+    strip.show();
+    delay = 10;
+    dynamicRainbow(delay);
+}
 
+  ///
+
+else if (pixel_mode == "rainbow")
+{
+  function staticRainbow()
+  {
+  var showColor;
+        for(var i = 0; i < strip.length; i++) {
+            showColor = colorWheel( ( (i+10)*256 / strip.length ) & 255 );
+            strip.pixel(i).color( showColor);
+        }
+        strip.show();
+      }
+      staticRainbow();
+
+}
   if (shutdown) {
     strip.off();
     strip.show();
@@ -330,6 +337,10 @@ rtm.on('message', (message) => {
       set_mode('steady');
       set_interval(100);
       break
+    case 'rainbow':
+      set_mode('rainbow');
+      set_interval(100);
+      break
     case 'on':
       start();
       break;
@@ -338,7 +349,6 @@ rtm.on('message', (message) => {
       break;
     default:
       console.log("Colour sent: " + command);
-      console.log(typeof(validcolors));
       if(command in validcolors)
       {
         colour = command;
@@ -347,7 +357,7 @@ rtm.on('message', (message) => {
       }
       else
       {
-        https.get('https://slack.com/api/chat.postEphemeral?token='+process.env.SLACK_TOKEN+'&channel='+message.channel+'&text=Not%20valid%20command.&user='+message.user+'&pretty=1');    
+        https.get('https://slack.com/api/chat.postEphemeral?token='+token+'&channel='+message.channel+'&text=Not%20valid%20command.&user='+message.user+'&pretty=1');    
       }
       break;
   }

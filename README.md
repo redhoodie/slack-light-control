@@ -15,13 +15,15 @@ To issue a message to the bot, send it its name, then the command:
 `@as_lightbot popo`
 
 Valid commands are:
-* christmas: Blink the lights red and green and blue
-* popo: Flash half the light bar red and blue, in the pattern of NZ Police car lights
-* off: Does what it says on the tin (turns the lights off)
-* random: Lots of random colors. Currently its quite bright and doesn't look too good, so working on tweaking it
+* christmas: Blink the lights red and green and blue. (Just green and blue maybe?)
+* popo: Flash half the light bar red and blue, in the pattern of police car lights in NZ.
+* off: Does what it says on the tin. (turns the lights off)
+* random: Flashes lots of random colors. Currently its quite bright and doesn't look too good, so working on tweaking it.
 * ~~fade: Fade through the color spectrum~~ Doesn't work right now. Still getting it going.
+* rainbow: A static spectrum of colors.
 * *colour*: Anything else, the bot will try parse as a colour. 
 
+All commands are case-insensitive.
 
 More to come
 
