@@ -101,7 +101,7 @@ var pixel_control_loop = function() {
     strip.show();
   }
 
-  else if (pixel_mode == "allcolours") 
+  else if (pixel_mode == "fade") 
   {
 
         strip.color('#000000');
