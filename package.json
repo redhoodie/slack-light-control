@@ -11,6 +11,8 @@
   "dependencies": {
     "@slack/client": "^4.8.0",
     "johnny-five": "^1.0.0",
-    "node-pixel": "^0.10.1"
+    "node-pixel": "^0.10.1",
+    "request": "^2.88.0",
+    "xmlhttprequest": "^1.8.0"
   }
 }

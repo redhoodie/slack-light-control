@@ -1,5 +1,6 @@
 // var five = require("johnny-five");
 var validcolors = require("./validcolors.json")
+var request = require("request")
 var pixel = require("node-pixel");
 const https = require ("https");
 var firmata = require("firmata");
@@ -9,6 +10,7 @@ var colour = "black";
 var phase = 0;
 var timer;
 var interval = 100;
+var realname;
 var strip_length = 56;
 var strip;
 var shutdown = false;
@@ -17,8 +19,8 @@ var brightness = 0.5; // 0...1 - ultra bright
 const { RTMClient } = require('@slack/client');
 
 const token = process.env.SLACK_TOKEN;
+const thetoken = process.env.SEND_SLACK_TOKEN
 
-console.log(token);
 
 const rtm = new RTMClient(token);
 rtm.start();
@@ -31,7 +33,7 @@ function sleep(ms){
 
  // Input a value 0 to 255 to get a color value.
     // The colors are a transition r - g - b - back to r.
-function colorWheel( wheelpos ){
+function spectrum( wheelpos ){
     var r,g,b;
     wheelpos = 255 - wheelpos;
 
@@ -150,7 +152,7 @@ else if (pixel_mode == "flashy") {
           else
           {
 
-          colour = colorWheel(((i+10)*256/strip.length)&255);
+          colour = spectrum(((i+10)*256/strip.length)&255);
 
           }
         }
@@ -169,7 +171,7 @@ else if (pixel_mode == "rainbow")
 {
         for(var i = 0; i < strip.length; i++) 
         {
-             colour = colorWheel(((i+10)*256/strip.length)&255);
+             colour = spectrum(((i+10)*256/strip.length)&255);
              strip.pixel(i).color(colour);
         }
         strip.show();
@@ -223,7 +225,7 @@ var board = new firmata.Board('/dev/tty.usbserial-A6008do8',function(){
     });
 });
 
-rtm.on('message', (message) => {
+rtm.on('message',(message) => {
   // Skip messages that are from a bot or my own user ID
   if ( (message.subtype && message.subtype === 'bot_message') ||
       (!message.subtype && message.user === rtm.activeUserId) ) {
@@ -238,9 +240,7 @@ rtm.on('message', (message) => {
     return;
   }
 
-  console.log(`(channel:${message.channel}) ${message.user} says: ${message.text}`);
-  // console.log(pixel_mode);
-  // console.log(body);
+
 
 current_mode = pixel_mode;
 
@@ -248,6 +248,16 @@ console.log('old mode is: ' + current_mode);
 
 
 
+var url = "https://slack.com/api/users.profile.get?token="+thetoken+"&user="+message.user+"&pretty=1"
+
+request({url: url,json: true}, 
+  function (error, response, body) {
+    if (!error && response.statusCode === 200) {
+      realname = body.profile.real_name
+    }
+
+    console.log("In the #"+message.channel+" channel, "+realname+" sent "+ message.text.replace(RegExp('^<@' + rtm.activeUserId + '> '), ''));
+})
   // Carry out the action
   var params = body.split(' ');
 
@@ -330,6 +340,7 @@ console.log('old mode is: ' + current_mode);
       set_mode('christmas');
       set_interval(200);
       break
+    case 'goal':
     case 'flashy':
       if (command == "flashy" && current_mode != "steady" && current_mode != "rainbow") //can't flash something already flashing i.e police lights
       {
@@ -341,7 +352,7 @@ console.log('old mode is: ' + current_mode);
         set_mode('flashy');
         set_interval(100);
       }
-      break
+    break
     case 'police':
     case 'popo':
       set_mode('popo');
