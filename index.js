@@ -11,8 +11,9 @@ var phase = 0;
 var timer;
 var interval = 100;
 var realname;
-var strip_length = 56;
+var strip_length = 55;
 var strip;
+var Rainbow = require('rainbowvis.js');
 var shutdown = false;
 var brightness = 0.5; // 0...1 - ultra bright
 
@@ -21,18 +22,15 @@ const { RTMClient } = require('@slack/client');
 const token = process.env.SLACK_TOKEN;
 const thetoken = process.env.SEND_SLACK_TOKEN
 
-
 const rtm = new RTMClient(token);
 rtm.start();
+
 
 function sleep(ms){
   return new Promise(resolve=>{
       setTimeout(resolve,ms)
   })
 }
-
- // Input a value 0 to 255 to get a color value.
-    // The colors are a transition r - g - b - back to r.
 function spectrum( wheelpos ){
     var r,g,b;
     wheelpos = 255 - wheelpos;
@@ -111,10 +109,10 @@ var pixel_control_loop = function() {
     phase = (phase + 1) % 6;
     strip.show();
   }
+
   else if (pixel_mode == "random") {
     for(var i = 0; i < strip_length; i++) {
       var red, green, blue;
-      // red = Math.floor(Math.random() * Math.floor(255));
       red   = Math.round(Math.random() * Math.floor(85) * brightness);
       green = Math.round(Math.random() * Math.floor(85) * brightness);
       blue  = Math.round(Math.random() * Math.floor(85) * brightness);
@@ -167,6 +165,33 @@ else if (pixel_mode == "flashy") {
     strip.show();
   }
 
+ else if (pixel_mode == "gradient")
+ {
+  if (!initalised) 
+  {
+
+    var rainbow = new Rainbow(); 
+    rainbow.setNumberRange(0, strip_length-2);
+    rainbow.setSpectrum('blue', 'red');
+    var s = '';
+
+    for (var i = 0; i <= strip_length; i++) 
+    {
+        var hexColour = rainbow.colourAt(i);
+        s += '#' + hexColour + ', ';
+
+
+    }
+    colour = s.split(", ",strip_length);
+    for (var i = 0; i <= strip_length-1; i++) 
+    {
+        strip.pixel(i).color(colour[i]);
+    }
+        strip.show();
+        initalised = true;
+      }
+     }
+
 else if (pixel_mode == "rainbow")
 {
         for(var i = 0; i < strip.length; i++) 
@@ -216,6 +241,7 @@ var board = new firmata.Board('/dev/tty.usbserial-A6008do8',function(){
         pin: 6, // this is still supported as a shorthand
         length: strip_length,
         firmata: board,
+        // gamma: 2,
         controller: "FIRMATA",
     });
 
@@ -358,9 +384,8 @@ request({url: url,json: true},
       set_mode('popo');
       set_interval(100);
       break
-    case 'fade':
-      set_mode('fade');
-      set_interval(100);
+    case 'gradient':
+      set_mode('gradient');
       break      
     case 'random':
       set_mode('random');
