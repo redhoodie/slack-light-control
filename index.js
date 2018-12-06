@@ -2,7 +2,7 @@
 var validcolors = require("./validcolors.json")
 var request = require("request")
 var pixel = require("node-pixel");
-const https = require ("https");
+const https = require("https");
 var firmata = require("firmata");
 var pixel_mode;
 var initalised;
@@ -18,7 +18,9 @@ var Rainbow = require('rainbowvis.js');
 var shutdown = false;
 var brightness = 0.5; // 0...1 - ultra bright
 
-const { RTMClient } = require('@slack/client');
+const {
+  RTMClient
+} = require('@slack/client');
 
 const token = process.env.SLACK_TOKEN;
 const thetoken = process.env.SEND_SLACK_TOKEN
@@ -27,40 +29,40 @@ const rtm = new RTMClient(token);
 rtm.start();
 
 
-function sleep(ms){
-  return new Promise(resolve=>{
-      setTimeout(resolve,ms)
+function sleep(ms) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
   })
 }
 
-function spectrum( wheelpos ){
-    var r,g,b;
-    wheelpos = 255 - wheelpos;
+function spectrum(wheelpos) {
+  var r, g, b;
+  wheelpos = 255 - wheelpos;
 
-    if ( wheelpos < 85 ) {
-        r = 255 - wheelpos * 3;
-        g = 0;
-        b = wheelpos * 3;
-    } else if (wheelpos < 170) {
-        wheelpos -= 85;
-        r = 0;
-        g = wheelpos * 3;
-        b = 255 - wheelpos * 3;
-    } else {
-        wheelpos -= 170;
-        r = wheelpos * 3;
-        g = 255 - wheelpos * 3;
-        b = 0;
-    }
-    // returns a string with the rgb value to be used as the parameter
-    return "rgb(" + r +"," + g + "," + b + ")";
+  if (wheelpos < 85) {
+    r = 255 - wheelpos * 3;
+    g = 0;
+    b = wheelpos * 3;
+  } else if (wheelpos < 170) {
+    wheelpos -= 85;
+    r = 0;
+    g = wheelpos * 3;
+    b = 255 - wheelpos * 3;
+  } else {
+    wheelpos -= 170;
+    r = wheelpos * 3;
+    g = 255 - wheelpos * 3;
+    b = 0;
+  }
+  // returns a string with the rgb value to be used as the parameter
+  return "rgb(" + r + "," + g + "," + b + ")";
 }
 
 var pixel_control_loop = function() {
   var rgb_brightness = Math.round(250 * brightness);
   if (pixel_mode == "christmas") {
     if (!initalised) {
-      for(var i = 0; i < strip_length; i++) {
+      for (var i = 0; i < strip_length; i++) {
         if (i % 2 == 0) {
           colour = "rgb(0," + rgb_brightness + ",0)";
         } else {
@@ -72,10 +74,9 @@ var pixel_control_loop = function() {
     }
     strip.shift(1, pixel.FORWARD, true);
     strip.show();
-  }
-  else if (pixel_mode == "popo") {
+  } else if (pixel_mode == "popo") {
     if (!initalised) {
-      for(var i = 0; i < strip_length; i++) {
+      for (var i = 0; i < strip_length; i++) {
         colour = "black";
         strip.pixel(i).color(colour);
       }
@@ -88,17 +89,15 @@ var pixel_control_loop = function() {
         // Red
         if (phase == 0 || phase == 4) {
           colour = "rgb(" + rgb_brightness + ", 0, 0)";
-        }
-        else {
+        } else {
           colour = "black";
         }
-      // Right
+        // Right
       } else {
         // Blue
         if (phase == 1 || phase == 3) {
           colour = "rgb(0, 0, " + rgb_brightness + ")";
-        }
-        else {
+        } else {
           colour = "black";
         }
       }
@@ -108,31 +107,24 @@ var pixel_control_loop = function() {
 
     phase = (phase + 1) % 6;
     strip.show();
-  }
-
-  else if (pixel_mode == "random") {
-    for(var i = 0; i < strip_length; i++) {
+  } else if (pixel_mode == "random") {
+    for (var i = 0; i < strip_length; i++) {
       var red, green, blue;
-      red   = Math.round(Math.random() * Math.floor(85) * brightness);
+      red = Math.round(Math.random() * Math.floor(85) * brightness);
       green = Math.round(Math.random() * Math.floor(85) * brightness);
-      blue  = Math.round(Math.random() * Math.floor(85) * brightness);
+      blue = Math.round(Math.random() * Math.floor(85) * brightness);
 
       strip.pixel(i).color("rgb(" + red + ", " + green + ", " + blue + ")");
     }
     strip.show();
-  }
-
-
-  else if (pixel_mode == "steady") {
-    for(var i = 0; i < strip_length; i++) {
+  } else if (pixel_mode == "steady") {
+    for (var i = 0; i < strip_length; i++) {
       strip.pixel(i).color(colour);
     }
     strip.show();
-  }
-
-else if (pixel_mode == "flashy") {
+  } else if (pixel_mode == "flashy") {
     if (!initalised) {
-      for(var i = 0; i < strip_length; i++) {
+      for (var i = 0; i < strip_length; i++) {
         colour = "black";
         strip.pixel(i).color(colour);
       }
@@ -141,62 +133,47 @@ else if (pixel_mode == "flashy") {
     }
     for (var i = 0; i < strip_length; i++) {
       if (i <= (strip_length)) {
-        if (phase == 0 || phase == 2)
-        {
-          if (current_mode != "rainbow") 
-          {
-            colour = currentcolor;    
-          }
-          else
-          {
+        if (phase == 0 || phase == 2) {
+          if (current_mode != "rainbow") {
+            colour = currentcolor;
+          } else {
 
-          colour = spectrum(((i+10)*256/strip.length)&255);
+            colour = spectrum(((i + 10) * 256 / strip.length) & 255);
 
           }
-        }
-        else {
+        } else {
           colour = "black";
         }
-      } 
+      }
       strip.pixel(i).color(colour);
     }
 
     phase = (phase + 1) % 2;
     strip.show();
-  }
- else if (pixel_mode == "gradient")
- {
-  if (!initalised) 
-  {
-     var rainbow = new Rainbow(); 
-    rainbow.setNumberRange(0, strip_length-2);
-    rainbow.setSpectrum('cyan','magenta','yellow');
-    var s = '';
-     for (var i = 0; i <= strip_length; i++) 
-    {
+  } else if (pixel_mode == "gradient") {
+    if (!initalised) {
+      var rainbow = new Rainbow();
+      rainbow.setNumberRange(0, strip_length - 2);
+      rainbow.setSpectrum('cyan', 'magenta', 'yellow');
+      var s = '';
+      for (var i = 0; i <= strip_length; i++) {
         var hexColour = rainbow.colourAt(i);
         s += '#' + hexColour + ', ';
-     }
-    colour = s.split(", ",strip_length);
-    for (var i = 0; i <= strip_length-1; i++) 
-    {
-        strip.pixel(i).color(colour[i]);
-    }
-        strip.show();
-        initalised = true;
       }
-     }
-
-
-else if (pixel_mode == "rainbow")
-{
-        for(var i = 0; i < strip.length; i++) 
-        {
-             colour = spectrum(((i+10)*256/strip.length)&255);
-             strip.pixel(i).color(colour);
-        }
-        strip.show();
-}
+      colour = s.split(", ", strip_length);
+      for (var i = 0; i <= strip_length - 1; i++) {
+        strip.pixel(i).color(colour[i]);
+      }
+      strip.show();
+      initalised = true;
+    }
+  } else if (pixel_mode == "rainbow") {
+    for (var i = 0; i < strip.length; i++) {
+      colour = spectrum(((i + 10) * 256 / strip.length) & 255);
+      strip.pixel(i).color(colour);
+    }
+    strip.show();
+  }
 
 
   if (shutdown) {
@@ -211,7 +188,7 @@ function set_interval(timeout) {
   timer = setInterval(pixel_control_loop, timeout);
 }
 
-function set_mode(mode){
+function set_mode(mode) {
   initalised = false;
   pixel_mode = mode;
   start();
@@ -223,39 +200,39 @@ function start() {
 }
 
 function stop() {
-  initalised = false; 
+  initalised = false;
   clearInterval(timer);
   strip.color("black");
   strip.off();
   strip.show();
 }
 
-var board = new firmata.Board('/dev/tty.usbserial-A6008do8',function(){
+var board = new firmata.Board('/dev/tty.usbserial-A6008do8', function() {
 
-    strip = new pixel.Strip({
-        pin: 6, // this is still supported as a shorthand
-        length: strip_length,
-        firmata: board,
-        // gamma: 2,
-        controller: "FIRMATA",
-    });
+  strip = new pixel.Strip({
+    pin: 6, // this is still supported as a shorthand
+    length: strip_length,
+    firmata: board,
+    // gamma: 2,
+    controller: "FIRMATA",
+  });
 
-    strip.on("ready", function() {
-      // do stuff with the strip here.
-      console.log("ready");
-    });
+  strip.on("ready", function() {
+    // do stuff with the strip here.
+    console.log("ready");
+  });
 });
 
-rtm.on('message',(message) => {
+rtm.on('message', (message) => {
   // Skip messages that are from a bot or my own user ID
-  if ( (message.subtype && message.subtype === 'bot_message') ||
-      (!message.subtype && message.user === rtm.activeUserId) ) {
+  if ((message.subtype && message.subtype === 'bot_message') ||
+    (!message.subtype && message.user === rtm.activeUserId)) {
     return;
   }
 
   // Check that the message is a real message and addresses me
   regex = RegExp('^<@' + rtm.activeUserId + '> ');
-  if(message.subtype == null && regex.test(message.text)){
+  if (message.subtype == null && regex.test(message.text)) {
     var body = message.text.replace(regex, '');
   } else {
     return;
@@ -263,20 +240,23 @@ rtm.on('message',(message) => {
 
 
 
-current_mode = pixel_mode;
+  current_mode = pixel_mode;
 
-console.log('old mode is: ' + current_mode);
+  console.log('old mode is: ' + current_mode);
 
-var url = "https://slack.com/api/users.profile.get?token="+thetoken+"&user="+message.user+"&pretty=1"
+  var url = "https://slack.com/api/users.profile.get?token=" + thetoken + "&user=" + message.user + "&pretty=1"
 
-request({url: url,json: true}, 
-  function (error, response, body) {
-    if (!error && response.statusCode === 200) {
-      realname = body.profile.real_name
-    }
+  request({
+      url: url,
+      json: true
+    },
+    function(error, response, body) {
+      if (!error && response.statusCode === 200) {
+        realname = body.profile.real_name
+      }
 
-    console.log("In the #"+message.channel+" channel, "+realname+" sent "+ message.text.replace(RegExp('^<@' + rtm.activeUserId + '> '), ''));
-})
+      console.log("In the #" + message.channel + " channel, " + realname + " sent " + message.text.replace(RegExp('^<@' + rtm.activeUserId + '> '), ''));
+    })
   // Carry out the action
   var params = body.split(' ');
 
@@ -362,25 +342,23 @@ request({url: url,json: true},
     case 'flashy':
       if (command == "flashy" && current_mode != "steady" && current_mode != "rainbow") //can't flash something already flashing i.e police lights
       {
-        https.get('https://slack.com/api/chat.postEphemeral?token='+token+'&channel='+message.channel+'&text=Cannot%20flash%20an%20already%20dynamic%20pattern.&user='+message.user+'&pretty=1'); 
+        https.get('https://slack.com/api/chat.postEphemeral?token=' + token + '&channel=' + message.channel + '&text=Cannot%20flash%20an%20already%20dynamic%20pattern.&user=' + message.user + '&pretty=1');
         break;
-      }
-      else
-      {
+      } else {
         set_mode('flashy');
         set_interval(100);
       }
-    break
+      break
     case 'police':
     case 'popo':
       set_mode('popo');
       set_interval(100);
       break
     case String(command.match(/^gradient.*/)):
-      command = command.replace("gradient","").trim().split(',');
+      command = command.replace("gradient", "").trim().split(',');
       console.log(command);
       set_mode('gradient');
-      break      
+      break
     case 'random':
       set_mode('random');
       set_interval(100);
@@ -401,23 +379,17 @@ request({url: url,json: true},
       break;
     default:
       console.log("Colour sent: " + command);
-      if(command in validcolors)
-      {
+      if (command in validcolors) {
         colour = command;
-        if (current_mode == "flashy") 
-        {
+        if (current_mode == "flashy") {
           set_mode('flashy');
-        }
-        else
-        {
+        } else {
           set_mode('steady');
         }
         currentcolor = colour;
         console.log(currentcolor);
-      }
-      else
-      {
-        https.get('https://slack.com/api/chat.postEphemeral?token='+token+'&channel='+message.channel+'&text=Not%20a%20valid%20command.&user='+message.user+'&pretty=1');    
+      } else {
+        https.get('https://slack.com/api/chat.postEphemeral?token=' + token + '&channel=' + message.channel + '&text=Not%20a%20valid%20command.&user=' + message.user + '&pretty=1');
       }
       break;
   }
