@@ -185,6 +185,10 @@ var pixel_control_loop = function() {
     }
     strip.show();
   } else if (pixel_mode == "sick_fade") {
+    if (gradientcolors == null && gradientcolors.length == 0) {
+      return;
+    }
+
     var length = 16;
     phase = phase % (length * 2);
     var rainbow = new Rainbow();
@@ -213,7 +217,7 @@ var pixel_control_loop = function() {
       }
     }
     strip.show();
-    phase = phase % (length * 2);
+    phase = (phase + 1) % (length * 2);
   }
 
   if (shutdown) {
