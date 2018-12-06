@@ -209,12 +209,15 @@ var pixel_control_loop = function() {
       var hexColour = rainbow.colourAt(i);
       colours.push('#' + hexColour);
     }
+
+    if (phase < length) {
+      j = phase;
+    } else {
+      j = length - phase;
+    }
+
     for (var i = 0; i <= strip_length - 1; i++) {
-      if (phase < length) {
-        strip.pixel(i).color(colours[phase]);
-      } else {
-        strip.pixel(i).color(colours[length - phase]);
-      }
+      strip.pixel(i).color(colours[j]);
     }
     strip.show();
     phase = (phase + 1) % ((length + 1) * 2);
