@@ -154,7 +154,13 @@ var pixel_control_loop = function() {
     if (!initalised) {
       var rainbow = new Rainbow();
       rainbow.setNumberRange(0, strip_length - 2);
-      rainbow.setSpectrum('cyan', 'magenta', 'yellow');
+      if (gradientcolors.length == 1) {
+        rainbow.setSpectrum(gradientcolors[0]);
+      } else if (gradientcolors.length == 2) {
+        rainbow.setSpectrum(gradientcolors[0], gradientcolors[1]);
+      } else if (gradientcolors.length == 3) {
+        rainbow.setSpectrum(gradientcolors[0], gradientcolors[1], gradientcolors[2]);
+      }
       var s = '';
       for (var i = 0; i <= strip_length; i++) {
         var hexColour = rainbow.colourAt(i);
@@ -355,8 +361,8 @@ rtm.on('message', (message) => {
       set_interval(100);
       break
     case String(command.match(/^gradient.*/)):
-      command = command.replace("gradient", "").trim().split(',');
-      console.log(command);
+      gradientcolors = command.replace("gradient", "").trim().split(',');
+      console.log(gradientcolors);
       set_mode('gradient');
       break
     case 'random':
