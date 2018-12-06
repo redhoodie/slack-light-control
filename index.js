@@ -122,7 +122,10 @@ var pixel_control_loop = function() {
       strip.pixel(i).color(colour);
     }
     strip.show();
-  } else if (pixel_mode == "flashy") {
+  } else if (pixel_mode == "spinna") {
+    strip.shift(1, pixel.FORWARD, true);
+    strip.show();
+  } else if (pixel_mode == "strobe") {
     if (!initalised) {
       for (var i = 0; i < strip_length; i++) {
         colour = "black";
@@ -386,13 +389,23 @@ rtm.on('message', (message) => {
       set_interval(200);
       break
     case 'goal':
-    case 'flashy':
-      if (command == "flashy" && current_mode != "steady" && current_mode != "rainbow") //can't flash something already flashing i.e police lights
+    case 'strobe':
+      if (command == "strobe" && current_mode != "steady" && current_mode != "rainbow") //can't flash something already flashing i.e police lights
       {
         https.get('https://slack.com/api/chat.postEphemeral?token=' + token + '&channel=' + message.channel + '&text=Cannot%20flash%20an%20already%20dynamic%20pattern.&user=' + message.user + '&pretty=1');
         break;
       } else {
-        set_mode('flashy');
+        set_mode('strobe');
+        set_interval(100);
+      }
+      break
+      case 'spinna':
+      if (command == "spinna" && current_mode != "steady" && current_mode != "rainbow") //can't flash something already flashing i.e police lights
+      {
+        https.get('https://slack.com/api/chat.postEphemeral?token=' + token + '&channel=' + message.channel + '&text=Cannot%20flash%20an%20already%20dynamic%20pattern.&user=' + message.user + '&pretty=1');
+        break;
+      } else {
+        set_mode('spinna');
         set_interval(100);
       }
       break
@@ -429,14 +442,18 @@ rtm.on('message', (message) => {
       console.log("Colour sent: " + command);
       if (params.length > 0) {
         gradientcolors = [command].concat(params);
-        set_mode('gradient');
+        if (current_mode == 'sick_fade') {
+          set_mode('sick_fade');
+        } else {
+          set_mode('gradient');
+        }
         break;
       }
 
       if (command in validcolors) {
         colour = command;
-        if (current_mode == "flashy") {
-          set_mode('flashy');
+        if (current_mode == "strobe") {
+          set_mode('strobe');
         } else {
           set_mode('steady');
         }
