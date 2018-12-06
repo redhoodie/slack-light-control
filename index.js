@@ -184,8 +184,34 @@ var pixel_control_loop = function() {
       strip.pixel(i).color(colour);
     }
     strip.show();
-  }
+  } else if (pixel_mode == "sick_fade") {
+    phase = phase % length;
 
+    length = 16;
+    var rainbow = new Rainbow();
+    rainbow.setNumberRange(0, length);
+    if (gradientcolors.length == 1) {
+      rainbow.setSpectrum(gradientcolors[0]);
+    } else if (gradientcolors.length == 2) {
+      rainbow.setSpectrum(gradientcolors[0], gradientcolors[1]);
+    } else if (gradientcolors.length == 3) {
+      rainbow.setSpectrum(gradientcolors[0], gradientcolors[1], gradientcolors[2]);
+    } else if (gradientcolors.length == 4) {
+      rainbow.setSpectrum(gradientcolors[0], gradientcolors[1], gradientcolors[2], gradientcolors[3]);
+    } else if (gradientcolors.length == 5) {
+      rainbow.setSpectrum(gradientcolors[0], gradientcolors[1], gradientcolors[2], gradientcolors[3], gradientcolors[4]);
+    }
+    var colours = [];
+    for (var i = 0; i <= strip_length; i++) {
+      var hexColour = rainbow.colourAt(i);
+      colours.push('#' + hexColour);
+    }
+    for (var i = 0; i <= strip_length - 1; i++) {
+      strip.pixel(i).color(colours[phase]);
+    }
+    strip.show();
+    phase = (phase + 1) % length;
+  }
 
   if (shutdown) {
     strip.off();
@@ -379,6 +405,9 @@ rtm.on('message', (message) => {
       break
     case 'rainbow':
       set_mode('rainbow');
+      break
+    case 'sick_fade':
+      set_mode('sick_fade');
       break
     case 'on':
       start();
