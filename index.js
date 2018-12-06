@@ -189,7 +189,7 @@ var pixel_control_loop = function() {
       return;
     }
 
-    var length = 16;
+    var length = gradientcolors.length * 16;
     phase = phase % (length * 2);
     var rainbow = new Rainbow();
     rainbow.setNumberRange(0, length);
