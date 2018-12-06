@@ -190,7 +190,7 @@ var pixel_control_loop = function() {
     }
 
     var length = 16;
-    phase = phase % (length * 2);
+    phase = phase % ((length + 1) * 2);
     var rainbow = new Rainbow();
     rainbow.setNumberRange(0, length);
     if (gradientcolors.length == 1) {
@@ -210,14 +210,14 @@ var pixel_control_loop = function() {
       colours.push('#' + hexColour);
     }
     for (var i = 0; i <= strip_length - 1; i++) {
-      if (phase <= length) {
+      if (phase < length) {
         strip.pixel(i).color(colours[phase]);
       } else {
         strip.pixel(i).color(colours[length - phase]);
       }
     }
     strip.show();
-    phase = (phase + 1) % (length * 2);
+    phase = (phase + 1) % ((length + 1) * 2);
   }
 
   if (shutdown) {
