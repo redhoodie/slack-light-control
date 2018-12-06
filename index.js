@@ -160,7 +160,12 @@ var pixel_control_loop = function() {
         rainbow.setSpectrum(gradientcolors[0], gradientcolors[1]);
       } else if (gradientcolors.length == 3) {
         rainbow.setSpectrum(gradientcolors[0], gradientcolors[1], gradientcolors[2]);
+      } else if (gradientcolors.length == 4) {
+        rainbow.setSpectrum(gradientcolors[0], gradientcolors[1], gradientcolors[2], gradientcolors[3]);
+      } else if (gradientcolors.length == 5) {
+        rainbow.setSpectrum(gradientcolors[0], gradientcolors[1], gradientcolors[2], gradientcolors[3], gradientcolors[4]);
       }
+      console.log(gradientcolors);
       var s = '';
       for (var i = 0; i <= strip_length; i++) {
         var hexColour = rainbow.colourAt(i);
@@ -361,8 +366,6 @@ rtm.on('message', (message) => {
       set_interval(100);
       break
     case String(command.match(/^gradient.*/)):
-      gradientcolors = command.replace("gradient", "").trim().split(',');
-      console.log(gradientcolors);
       set_mode('gradient');
       break
     case 'random':
@@ -385,6 +388,12 @@ rtm.on('message', (message) => {
       break;
     default:
       console.log("Colour sent: " + command);
+      if (params.length > 0) {
+        gradientcolors = [command].concat(params);
+        set_mode('gradient');
+        break;
+      }
+
       if (command in validcolors) {
         colour = command;
         if (current_mode == "flashy") {
