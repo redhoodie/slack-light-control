@@ -9,6 +9,7 @@ var initalised;
 var colour = "black";
 var phase = 0;
 var timer;
+var gradientcolors = null;
 var interval = 100;
 var realname;
 var strip_length = 55;
@@ -31,6 +32,7 @@ function sleep(ms){
       setTimeout(resolve,ms)
   })
 }
+
 function spectrum( wheelpos ){
     var r,g,b;
     wheelpos = 255 - wheelpos;
@@ -53,8 +55,6 @@ function spectrum( wheelpos ){
     // returns a string with the rgb value to be used as the parameter
     return "rgb(" + r +"," + g + "," + b + ")";
 }
-
-
 
 var pixel_control_loop = function() {
   var rgb_brightness = Math.round(250 * brightness);
@@ -164,24 +164,19 @@ else if (pixel_mode == "flashy") {
     phase = (phase + 1) % 2;
     strip.show();
   }
-
  else if (pixel_mode == "gradient")
  {
   if (!initalised) 
   {
-
-    var rainbow = new Rainbow(); 
+     var rainbow = new Rainbow(); 
     rainbow.setNumberRange(0, strip_length-2);
-    rainbow.setSpectrum('blue', 'red');
+    rainbow.setSpectrum('cyan','magenta','yellow');
     var s = '';
-
-    for (var i = 0; i <= strip_length; i++) 
+     for (var i = 0; i <= strip_length; i++) 
     {
         var hexColour = rainbow.colourAt(i);
         s += '#' + hexColour + ', ';
-
-
-    }
+     }
     colour = s.split(", ",strip_length);
     for (var i = 0; i <= strip_length-1; i++) 
     {
@@ -191,6 +186,7 @@ else if (pixel_mode == "flashy") {
         initalised = true;
       }
      }
+
 
 else if (pixel_mode == "rainbow")
 {
@@ -208,7 +204,6 @@ else if (pixel_mode == "rainbow")
     strip.show();
   }
 }
-
 
 
 function set_interval(timeout) {
@@ -272,8 +267,6 @@ current_mode = pixel_mode;
 
 console.log('old mode is: ' + current_mode);
 
-
-
 var url = "https://slack.com/api/users.profile.get?token="+thetoken+"&user="+message.user+"&pretty=1"
 
 request({url: url,json: true}, 
@@ -290,7 +283,6 @@ request({url: url,json: true},
   command = params.shift().toLowerCase();
 
   console.log('new command is: ' + command);
-
 
   switch (command) {
     // Speed
@@ -384,7 +376,9 @@ request({url: url,json: true},
       set_mode('popo');
       set_interval(100);
       break
-    case 'gradient':
+    case String(command.match(/^gradient.*/)):
+      command = command.replace("gradient","").trim().split(',');
+      console.log(command);
       set_mode('gradient');
       break      
     case 'random':
