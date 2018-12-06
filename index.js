@@ -406,7 +406,7 @@ rtm.on('message', (message) => {
         break;
       } else {
         set_mode('spinna');
-        set_interval(100);
+        set_interval(20);
       }
       break
     case 'police':
@@ -431,6 +431,7 @@ rtm.on('message', (message) => {
       break
     case 'sick_fade':
       set_mode('sick_fade');
+      set_interval(100);
       break
     case 'on':
       start();
