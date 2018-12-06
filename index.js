@@ -215,6 +215,7 @@ var pixel_control_loop = function() {
     } else {
       j = length - phase;
     }
+    console.log(j);
 
     for (var i = 0; i <= strip_length - 1; i++) {
       strip.pixel(i).color(colours[j]);
