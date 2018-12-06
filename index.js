@@ -400,7 +400,7 @@ rtm.on('message', (message) => {
       }
       break
       case 'spinna':
-      if (command == "spinna" && current_mode != "steady" && current_mode != "rainbow") //can't flash something already flashing i.e police lights
+      if (command == "spinna" && current_mode != "steady" && current_mode != "rainbow" && current_mode != "christmas" && current_mode != "gradient") //can't flash something already flashing i.e police lights
       {
         https.get('https://slack.com/api/chat.postEphemeral?token=' + token + '&channel=' + message.channel + '&text=Cannot%20flash%20an%20already%20dynamic%20pattern.&user=' + message.user + '&pretty=1');
         break;
