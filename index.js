@@ -190,7 +190,7 @@ var pixel_control_loop = function() {
     }
 
     var length = 16;
-    phase = phase % ((length + 1) * 2);
+    phase = phase % (length * 2);
     var rainbow = new Rainbow();
     rainbow.setNumberRange(0, length);
     if (gradientcolors.length == 1) {
@@ -221,7 +221,7 @@ var pixel_control_loop = function() {
       strip.pixel(i).color(colours[j]);
     }
     strip.show();
-    phase = (phase + 1) % ((length + 1) * 2);
+    phase = (phase + 1) % (length * 2);
   }
 
   if (shutdown) {
