@@ -213,7 +213,7 @@ var pixel_control_loop = function() {
     if (phase < length) {
       j = phase;
     } else {
-      j = length - phase;
+      j = (length * 2) - phase;
     }
     console.log(j);
 
