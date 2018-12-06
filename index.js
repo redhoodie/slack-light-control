@@ -213,7 +213,7 @@ var pixel_control_loop = function() {
       }
     }
     strip.show();
-    phase = (phase + 1) % length;
+    phase = phase % (length * 2);
   }
 
   if (shutdown) {
