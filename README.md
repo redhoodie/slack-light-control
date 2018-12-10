@@ -19,9 +19,10 @@ Valid commands are:
 * popo: Flash half the light bar red and blue, in the pattern of police car lights in NZ.
 * off: Does what it says on the tin. (turns the lights off)
 * random: Flashes lots of random colors. Currently its quite bright and doesn't look too good, so working on tweaking it.
-* ~~fade: Fade through the color spectrum~~ Doesn't work right now. Still getting it going.
 * rainbow: A static spectrum of colors.
-* *colour*: Anything else, the bot will try parse as a colour. 
+* spinna: Try it for yourself!
+* *colour*: Anything else, the bot will try parse as a colour. Tip: Send the bot multiple colors to make a gradient
+* sick_fade: When on a gradient, send sick_fade to make the whole strip fade through the colors you have sent it
 * *More to come*
 
 All commands are case-insensitive.

@@ -12,7 +12,7 @@ var timer;
 var gradientcolors = null;
 var interval = 100;
 var realname;
-var strip_length = 55;
+var strip_length = 110;
 var strip;
 var Rainbow = require('rainbowvis.js');
 var shutdown = false;
@@ -156,7 +156,7 @@ var pixel_control_loop = function() {
   } else if (pixel_mode == "gradient") {
     if (!initalised) {
       var rainbow = new Rainbow();
-      rainbow.setNumberRange(0, strip_length - 2);
+      rainbow.setNumberRange(0, strip_length);
       if (gradientcolors.length == 1) {
         rainbow.setSpectrum(gradientcolors[0]);
       } else if (gradientcolors.length == 2) {
