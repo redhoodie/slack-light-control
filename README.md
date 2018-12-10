@@ -19,11 +19,12 @@ Valid commands are:
 * popo: Flash half the light bar red and blue, in the pattern of police car lights in NZ.
 * off: Does what it says on the tin. (turns the lights off)
 * random: Flashes lots of random colors. Currently its quite bright and doesn't look too good, so working on tweaking it.
-* rainbow: A static spectrum of colors.
-* spinna: Try it for yourself!
+* rainbow: A static spectrum of colors. Tip: Send *spinna* while on rainbow for a magical effect
 * *colour*: Anything else, the bot will try parse as a colour. Tip: Send the bot multiple colors to make a gradient
-* sick_fade: When on a gradient, send sick_fade to make the whole strip fade through the colors you have sent it
+* sick_fade: **When on a gradient**, send sick_fade to make the whole strip fade through the colors you have sent it
 * *More to come*
+
+The Arduino this is running on is quite old, (its running a USB->Serial) and running JavaScript, so commands make take a few seconds to register. Be patient lol.
 
 All commands are case-insensitive.
 
