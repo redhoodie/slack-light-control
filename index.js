@@ -252,7 +252,6 @@ function start() {
 function stop() {
   initalised = false;
   clearInterval(timer);
-  strip.color("black");
   strip.off();
   strip.show();
 }
