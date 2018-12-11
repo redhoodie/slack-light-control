@@ -275,8 +275,8 @@ var board = new firmata.Board('/dev/tty.usbserial-A6008do8', function() {
 
 rtm.on('message', (message) => {
   // Skip messages that are from a bot or my own user ID
-  if ((message.subtype && message.subtype === 'bot_message') ||
-    (!message.subtype && message.user === rtm.activeUserId)) {
+  if 
+    (!message.subtype && message.user === rtm.activeUserId){
     return;
   }
 
